@@ -32,7 +32,7 @@ export const Wrapper = styled.div`
   }
   h1 {
     font-family: 'Fascinate Inline', cursive;
-    background-image: linear-gradient(180deg, #fff, #87f1ff);
+    background-image: linear-gradient(180deg, #fff, #208ea6);
     font-weight: 400;
     background-size: 100%;
     background-clip: text;
@@ -47,7 +47,7 @@ export const Wrapper = styled.div`
   }
   .start, .next {
     cursor: pointer;
-    background: linear-gradient(180deg, #ffffff, #ffcc91);
+    background: linear-gradient(180deg, #ffffff, #208ea6);
     border: 2px solid #d38558;
     box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.25);
     border-radius: 10px;
