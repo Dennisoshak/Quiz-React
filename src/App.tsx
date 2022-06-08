@@ -74,7 +74,8 @@ else {
   {gameOver || timesOver || userAnswers.length === TOTAL_QUESTIONS ? (
   <button className='start'onClick={startTrivia}>Start</button>
   ): null}
-  {!gameOver && <div className='score'>Score: {score}{!timesOver?<Timer setTimesOver={setTimesOver}/>:<p>Time's Over</p>}</div>}
+  {!gameOver && <div className='score'>Score: {score}
+  {!timesOver && !gameOver?<Timer setTimesOver={setTimesOver}/>:<p>Game's Over</p>}</div>}
   {loading &&<p>Loading Questions...</p>}
  {!loading && !gameOver && !timesOver && <QuestionCard questionNr={number+1} totalQuestions={TOTAL_QUESTIONS} question={questions[number].question} answers={questions[number].answers} userAnswer={userAnswers? userAnswers[number] : undefined} callback={checkAnswers}/> }
  {!gameOver && !timesOver && !loading && userAnswers.length === number+1 && number !== TOTAL_QUESTIONS-1 &&
