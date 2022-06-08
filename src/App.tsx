@@ -75,7 +75,7 @@ else {
   <button className='start'onClick={startTrivia}>Start</button>
   ): null}
   {!gameOver && <div className='score'>Score: {score}
-  {!timesOver && !gameOver?<Timer setTimesOver={setTimesOver}/>:<p>Game's Over</p>}</div>}
+  {!timesOver && !gameOver && !loading? <Timer setTimesOver={setTimesOver}/>:null}</div>}
   {loading &&<p>Loading Questions...</p>}
  {!loading && !gameOver && !timesOver && <QuestionCard questionNr={number+1} totalQuestions={TOTAL_QUESTIONS} question={questions[number].question} answers={questions[number].answers} userAnswer={userAnswers? userAnswers[number] : undefined} callback={checkAnswers}/> }
  {!gameOver && !timesOver && !loading && userAnswers.length === number+1 && number !== TOTAL_QUESTIONS-1 &&
@@ -86,3 +86,10 @@ else {
 }
 
 export default App;
+
+
+
+
+
+
+
