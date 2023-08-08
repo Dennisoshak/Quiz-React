@@ -25,7 +25,6 @@ const [gameOver, setGameOver]= useState(true)
 const [timesOver, setTimesOver] = useState(false)
 const TOTAL_QUESTIONS = 10
 
-console.log(fetchQuizQuestions(TOTAL_QUESTIONS,Difficulty.EASY))
 
  const startTrivia = async () => {
 setLoading(true)
@@ -41,6 +40,12 @@ setTimesOver(false)
  }
 
  const checkAnswers = (e: React.MouseEvent<HTMLButtonElement>) => {
+  if (number === TOTAL_QUESTIONS-1) {
+    setTimeout(()=>{
+      setGameOver(true)
+    },1000)
+  }
+    
 if (!gameOver) {
   const answer = e.currentTarget.value;
   const correct = questions[number].correct_answer === answer
@@ -59,7 +64,9 @@ if (!gameOver) {
  }
  const nextQuestion = () => {
 const nextQuestion = number+1;
+console.log(nextQuestion)
 if (nextQuestion === TOTAL_QUESTIONS || timesOver) {
+  console.log(number, "over")
   setGameOver(true)
 }
 else {
@@ -70,14 +77,15 @@ else {
     <>
 <GlobalStyle />
 <Wrapper>
-  <h1>React Quiz</h1>
+  <h1>Quizzing</h1>
   {gameOver || timesOver || userAnswers.length === TOTAL_QUESTIONS ? (
   <button className='start'onClick={startTrivia}>Start</button>
   ): null}
-  {!gameOver && <div className='score'>Score: {score}
-  {!timesOver && !gameOver && !loading? <Timer setTimesOver={setTimesOver}/>:null}</div>}
+  { <div className='score'>Score: {score}
+  {!timesOver && !gameOver && !loading? <Timer setTimesOver={setTimesOver}gameOver={gameOver}/>:null}</div>}
   {loading &&<p>Loading Questions...</p>}
- {!loading && !gameOver && !timesOver && <QuestionCard questionNr={number+1} totalQuestions={TOTAL_QUESTIONS} question={questions[number].question} answers={questions[number].answers} userAnswer={userAnswers? userAnswers[number] : undefined} callback={checkAnswers}/> }
+ {!loading && !gameOver && !timesOver && 
+ <QuestionCard questionNr={number+1} totalQuestions={TOTAL_QUESTIONS} question={questions[number].question} answers={questions[number].answers} userAnswer={userAnswers? userAnswers[number] : undefined} callback={checkAnswers}/> }
  {!gameOver && !timesOver && !loading && userAnswers.length === number+1 && number !== TOTAL_QUESTIONS-1 &&
   <button className='next' onClick={nextQuestion}>Next Question</button>}
     </Wrapper>
