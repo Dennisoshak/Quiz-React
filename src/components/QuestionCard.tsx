@@ -1,32 +1,42 @@
 import React from 'react'
-import {AnswerObject} from '../App'
+import { AnswerObject } from '../contexts/GameContext'
 import { Wrapper, ButtonWrapper } from './QuestionCard.styles';
 
-type Props = {
-   question:string,
-   answers: string[] ,
-   callback:(e:React.MouseEvent<HTMLButtonElement>)=>void,
-   userAnswer:AnswerObject | undefined,
-   questionNr: number,
-   totalQuestions: number
+interface Props {
+  question: string;
+  answers: string[];
+  callback: (answer: string) => void;
+  userAnswer: AnswerObject | undefined;
+  questionNr: number;
+  totalQuestions: number;
+  gameOver: boolean;
 }
-const QuestionCard: React.FC<Props> = ({ question, answers, callback, userAnswer, questionNr, totalQuestions}) =>{
-return (
-<Wrapper>
-    <p className='number'>Question: {questionNr} / {totalQuestions}</p>
-    <p dangerouslySetInnerHTML={{__html:question}}/>
-    <div>
-        {answers.map(answer => (
-            <ButtonWrapper key={answer}
+const QuestionCard: React.FC<Props> = ({ question, answers, callback, userAnswer, questionNr, totalQuestions, gameOver }) => {
+  const handleCheckAnswer = (answer: string) => {
+    if (!gameOver) {
+      callback(answer);
+    }
+  };
+
+  return (
+    <Wrapper>
+      <p className='number'>Question: {questionNr} / {totalQuestions}</p>
+      <span dangerouslySetInnerHTML={{__html: question}} />
+      <div>
+        {answers.map((answer) => (
+          <ButtonWrapper 
+            key={answer}
             correct={userAnswer?.correctAnswer === answer}
-          userClicked={userAnswer?.answer === answer}>
-                <button disabled={!!userAnswer}value={answer} onClick={callback}>
-                    <span dangerouslySetInnerHTML={{__html:answer}}/> </button>
-            </ButtonWrapper>
+            userClicked={userAnswer?.answer === answer}
+            disabled={!!userAnswer}
+            onClick={() => handleCheckAnswer(answer)}
+          >
+            <span dangerouslySetInnerHTML={{__html: answer}} />
+          </ButtonWrapper>
         ))}
-    </div>
-</Wrapper>
-)
+      </div>
+    </Wrapper>
+  );
 }
 
-export default QuestionCard
+export default QuestionCard;

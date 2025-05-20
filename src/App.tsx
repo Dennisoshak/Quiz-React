@@ -6,7 +6,7 @@ import {GlobalStyle, Wrapper} from "./App.styles"
 import { GameProvider, useGame } from './contexts/GameContext'
 import { AnswerObject } from './contexts/GameContext'
 
-const AppContent = () => {
+const AppContent: React.FC = () => {
   const {
     questions,
     number,
@@ -21,21 +21,22 @@ const AppContent = () => {
     nextQuestion
   } = useGame();
 
-  }
-    
-if (!gameOver) {
-  const answer = e.currentTarget.value;
-  const correct = questions[number].correct_answer === answer
-  if (correct)  setScore(prev=>prev+1)
-  const answerObject = {
-    question: questions[number].question,
-    answer,
-    correct,
-    correctAnswer: questions[number].correct_answer
-  }
-  setUserAnswers(prev=> [...prev,answerObject])
+  const handleCheckAnswer = (answer: string) => {
+    if (!gameOver) {
+      checkAnswer(answer);
+    }
+  };
 
-  
+  const handleTimerTimesOver = () => {
+    // This function is just a placeholder since we're using the GameContext
+    // The actual timesOver state is managed by the GameContext
+  };
+
+  const handleRestartGame = () => {
+    // This function is just a placeholder since we're using the GameContext
+    // The actual restartGame state is managed by the GameContext
+  };
+
   return (
     <Wrapper>
       <h1>Quiz</h1>
@@ -45,19 +46,22 @@ if (!gameOver) {
         </button>
       ) : null}
       {!gameOver && !timesOver && (
-        <div className="score">Score: {score}
-          {!timesOver && !gameOver && !loading ? <Timer setTimesOver={() => { }} gameOver={gameOver} /> : null}
+        <div className="score">
+          Score: {score}
+          {!timesOver && !gameOver && !loading ? (
+            <Timer setTimesOver={handleTimerTimesOver} gameOver={gameOver} />
+          ) : null}
         </div>
       )}
       {loading && <p>Loading Questions...</p>}
       {!loading && !gameOver && !timesOver && (
-        <QuestionCard
-          questionNr={number + 1}
-          totalQuestions={totalQuestions}
-          question={questions[number].question}
-          answers={questions[number].answers}
-          userAnswer={userAnswers ? userAnswers[number] : undefined}
-          callback={checkAnswer}
+        <QuestionCard 
+          questionNr={number + 1} 
+          totalQuestions={totalQuestions} 
+          question={questions[number].question} 
+          answers={questions[number].answers} 
+          userAnswer={userAnswers ? userAnswers[number] : undefined} 
+          callback={(answer: string) => handleCheckAnswer(answer)}
         />
       )}
       {!gameOver && !timesOver && !loading && userAnswers.length === number + 1 && number !== totalQuestions - 1 && (

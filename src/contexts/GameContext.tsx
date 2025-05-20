@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { QuestionsState, Difficulty, fetchQuizQuestions } from '../API';
+import { ReactNode } from 'react';
 
 export type AnswerObject = {
   question: string;
@@ -8,25 +9,28 @@ export type AnswerObject = {
   correctAnswer: string;
 };
 
-interface GameContextType {
-  questions: QuestionsState[];
-  number: number;
-  userAnswers: AnswerObject[];
-  score: number;
-  gameOver: boolean;
-  timesOver: boolean;
-  loading: boolean;
-  totalQuestions: number;
-  difficulty: Difficulty;
-  startTrivia: () => Promise<void>;
-  checkAnswer: (e: React.MouseEvent<HTMLButtonElement>) => void;
-  nextQuestion: () => void;
-  resetGame: () => void;
+interface GameContextProps {
+  children: ReactNode;
 }
 
-const GameContext = createContext<GameContextType | undefined>(undefined);
+export interface GameStateContextType {
+  questions: QuestionsState[];
+  currentQuestionNumber: number;
+  userAnswer: AnswerObject | null;
+  score: number;
+  gameOver: boolean;
+  loading: boolean;
+  difficulty: Difficulty;
+  startTrivia: () => Promise<void>;
+  checkAnswer: (answer: string) => void;
+  nextQuestion: () => void;
+  resetGame: () => void;
+  timesOver: boolean;
+}
 
-export const GameProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+const GameContext = createContext<GameStateContextType | undefined>(undefined);
+
+export const GameProvider: React.FC<GameContextProps> = ({ children }) => {
   const [questions, setQuestions] = useState<QuestionsState[]>([]);
   const [number, setNumber] = useState(0);
   const [userAnswers, setUserAnswers] = useState<AnswerObject[]>([]);
@@ -55,26 +59,22 @@ export const GameProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   };
 
-  const checkAnswer = (e: React.MouseEvent<HTMLButtonElement>) => {
-    if (number === TOTAL_QUESTIONS - 1) {
-      setTimeout(() => {
-        setGameOver(true);
-      }, 1000);
-    }
-
+  const checkAnswer = (answer: string) => {
     if (!gameOver) {
-      const answer = e.currentTarget.value;
-      const correct = questions[number].correct_answer === answer;
-      if (correct) setScore(prev => prev + 1);
-
+      const correct = answer === questions[number].correct_answer;
       const answerObject = {
         question: questions[number].question,
         answer,
         correct,
         correctAnswer: questions[number].correct_answer,
       };
-
       setUserAnswers(prev => [...prev, answerObject]);
+      if (correct) setScore(prev => prev + 1);
+      if (number === TOTAL_QUESTIONS - 1) {
+        setTimeout(() => {
+          setGameOver(true);
+        }, 1000);
+      }
     }
   };
 
@@ -101,18 +101,17 @@ export const GameProvider: React.FC<{ children: React.ReactNode }> = ({ children
     <GameContext.Provider
       value={{
         questions,
-        number,
-        userAnswers,
+        currentQuestionNumber: number,
+        userAnswer: userAnswers[number] || null,
         score,
         gameOver,
-        timesOver,
         loading,
-        totalQuestions: TOTAL_QUESTIONS,
         difficulty,
         startTrivia,
         checkAnswer,
         nextQuestion,
         resetGame,
+        timesOver,
       }}
     >
       {children}
