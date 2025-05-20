@@ -10,6 +10,7 @@ interface Iprops {
     setTimesOver:Dispatch<SetStateAction<boolean>>,
     gameOver:boolean
 }
+
 const Timer:React.FC<Iprops> = (Iprops) => {
   const renderer = ({ minutes, seconds, completed}:TimerProps) => {
     if(Iprops.gameOver){
