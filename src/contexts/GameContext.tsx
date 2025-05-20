@@ -16,7 +16,7 @@ interface GameContextProps {
 export interface GameStateContextType {
   questions: QuestionsState[];
   currentQuestionNumber: number;
-  userAnswer: AnswerObject | null;
+  userAnswer: AnswerObject | undefined;
   score: number;
   gameOver: boolean;
   loading: boolean;
@@ -26,6 +26,7 @@ export interface GameStateContextType {
   nextQuestion: () => void;
   resetGame: () => void;
   timesOver: boolean;
+  totalQuestions: number;
 }
 
 const GameContext = createContext<GameStateContextType | undefined>(undefined);
@@ -112,6 +113,7 @@ export const GameProvider: React.FC<GameContextProps> = ({ children }) => {
         nextQuestion,
         resetGame,
         timesOver,
+        totalQuestions: TOTAL_QUESTIONS
       }}
     >
       {children}

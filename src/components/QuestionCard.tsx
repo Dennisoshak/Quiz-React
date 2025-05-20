@@ -3,11 +3,11 @@ import { AnswerObject } from '../contexts/GameContext'
 import { Wrapper, ButtonWrapper } from './QuestionCard.styles';
 
 interface Props {
+  questionNr: number;
   question: string;
   answers: string[];
   callback: (answer: string) => void;
   userAnswer: AnswerObject | undefined;
-  questionNr: number;
   totalQuestions: number;
   gameOver: boolean;
 }

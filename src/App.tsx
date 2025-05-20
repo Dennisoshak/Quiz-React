@@ -9,8 +9,8 @@ import { AnswerObject } from './contexts/GameContext'
 const AppContent: React.FC = () => {
   const {
     questions,
-    number,
-    userAnswers,
+    currentQuestionNumber,
+    userAnswer,
     score,
     gameOver,
     timesOver,
@@ -56,15 +56,16 @@ const AppContent: React.FC = () => {
       {loading && <p>Loading Questions...</p>}
       {!loading && !gameOver && !timesOver && (
         <QuestionCard 
-          questionNr={number + 1} 
+          questionNr={currentQuestionNumber + 1} 
           totalQuestions={totalQuestions} 
-          question={questions[number].question} 
-          answers={questions[number].answers} 
-          userAnswer={userAnswers ? userAnswers[number] : undefined} 
+          question={questions[currentQuestionNumber].question} 
+          answers={questions[currentQuestionNumber].answers} 
+          userAnswer={userAnswer} 
           callback={(answer: string) => handleCheckAnswer(answer)}
+          gameOver={gameOver}
         />
       )}
-      {!gameOver && !timesOver && !loading && userAnswers.length === number + 1 && number !== totalQuestions - 1 && (
+      {!gameOver && !timesOver && !loading && userAnswer && currentQuestionNumber !== totalQuestions - 1 && (
         <button className='next' onClick={nextQuestion}>
           Next Question
         </button>
