@@ -19,6 +19,17 @@ export const GlobalStyle = createGlobalStyle`
 `;
 
 export const Wrapper = styled.div`
+
+  .start-screen, .quiz-screen, .gameover-screen {
+    max-width: 500px;
+    margin: 0 auto;
+    padding: 2rem;
+    background: rgba(255,255,255,0.85);
+    border-radius: 16px;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+    text-align: center;
+  }
+
   display: flex;
   flex-direction: column;
   align-items: center;
